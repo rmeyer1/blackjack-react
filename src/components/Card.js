@@ -1,9 +1,10 @@
+// Card.js
 import React from 'react';
 
-function Card({ suit, value }) {
+function Card({ card }) {
   return (
     <div className="card">
-      {value} of {suit}
+      {card.rank} of {card.suit}
     </div>
   );
 }

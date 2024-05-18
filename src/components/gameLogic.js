@@ -1,4 +1,4 @@
-import { shuffle } from './Deck';
+import { shuffle, dealCard } from './Deck';
 
 export const generateDeck = () => {
   const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
@@ -69,3 +69,18 @@ export const checkGameStatus = (playerHand, dealerHand) => {
   }
   return 'playing';
 };
+export const splitHand = (player, handIndex) => {
+    const hand = player.hands[handIndex];
+    if (hand.cards.length === 2 && hand.cards[0].rank === hand.cards[1].rank && player.hands.length < 3) {
+      // Create a new hand with one of the split cards
+      const newHand = {
+        cards: [hand.cards.pop()],
+        // Other necessary properties like bet if implemented
+      };
+      player.hands.push(newHand);
+      // Deal one new card to each of the split hands
+      dealCards(hand);
+      dealCards(newHand);
+    }
+  };
+
