@@ -56,18 +56,16 @@ export const checkGameStatus = (playerHand, dealerHand) => {
   }
   return 'playing';
 };
-export const splitHand = (player, handIndex) => {
-    const hand = player.hands[handIndex];
-    if (hand.cards.length === 2 && hand.cards[0].rank === hand.cards[1].rank && player.hands.length < 3) {
-      // Create a new hand with one of the split cards
-      const newHand = {
-        cards: [hand.cards.pop()],
-        // Other necessary properties like bet if implemented
-      };
-      player.hands.push(newHand);
+export const splitHand = (deck, playerHand) => {
+    const newDeck = [...deck]
+    if (playerHand.length === 2 && playerHand[0].rank === playerHand[1].rank && playerHand.length < 3) {
+      // Create a new hands with one of the split cards
+      const splitHandOne = [playerHand[0], newDeck.pop()]
+      const splitHandTwo = [playerHand[1], newDeck.pop()]
       // Deal one new card to each of the split hands
-      dealCards(hand);
-      dealCards(newHand);
+      return { splitHandOne, splitHandTwo, newDeck }
     }
   };
+
+  
 

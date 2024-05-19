@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { dealCards, hit, stand, checkGameStatus, splitHand } from './components/gameLogic';
+import { dealCards, hit, stand, checkGameStatus, splitHand, calculateHandValue } from './components/gameLogic';
 import { generateDeck } from './components/Deck';
 import Hand from './components/Hand';
 import './App.css';
@@ -41,16 +41,16 @@ function App() {
       const { newDeck, newHand } = stand(deck, dealerHand);
       setDeck(newDeck);
       setDealerHand(newHand);
-      const status = checkGameStatus(playerHands, newHand);
+      const status = checkGameStatus(playerHands[activeHandIndex], newHand);
       setGameStatus(status);
     }
   };
 
   const handleSplit = () => {
-    const { newHands, newDeck } = splitHand(deck, playerHands[activeHandIndex]);
-    const updatedHands = [...playerHands];
-    updatedHands[activeHandIndex] = newHands[0];
-    updatedHands.push(newHands[1]);
+    const { splitHandOne, splitHandTwo, newDeck } = splitHand(deck, playerHands[activeHandIndex]);
+    const updatedHands = [];
+    updatedHands[activeHandIndex] = splitHandOne;
+    updatedHands.push(splitHandTwo);
     setDeck(newDeck);
     setPlayerHands(updatedHands);
   };
@@ -65,9 +65,13 @@ function App() {
         <button onClick={handleSplit} disabled={gameStatus !== 'playing'}>Split</button>
       )}
       {playerHands.map((hand, index) => (
-        <Hand key={index} cards={hand} title={`Player Hand ${index + 1}`} />
+        <div key={index}>
+          <Hand cards={hand} title={`Player Hand ${index + 1}`} />
+          <div>Player Value: {calculateHandValue(hand)}</div>
+        </div>
       ))}
       <Hand cards={dealerHand} title="Dealer Hand" />
+      <div>Dealer Value: {calculateHandValue(dealerHand)}</div>
       <div>Game Status: {gameStatus}</div>
     </div>
   );
