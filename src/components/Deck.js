@@ -1,7 +1,7 @@
 // Deck.js
 export const generateDeck = () => {
     const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
-    const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
     const deck = [];
   
     for (let suit of suits) {
@@ -19,12 +19,5 @@ export const generateDeck = () => {
       [deck[i], deck[j]] = [deck[j], deck[i]];
     }
     return deck;
-  };
-  
-  export const dealCards = (deck) => {
-    const newDeck = [...deck];
-    const playerHand = [newDeck.pop(), newDeck.pop()];
-    const dealerHand = [newDeck.pop(), newDeck.pop()];
-    return { newDeck, playerHand, dealerHand };
   };
   

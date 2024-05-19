@@ -1,7 +1,6 @@
-// App.js
-
 import React, { useState, useEffect } from 'react';
-import { generateDeck, dealCards, hit, stand, checkGameStatus, splitHand } from './components/gameLogic';
+import { dealCards, hit, stand, checkGameStatus, splitHand } from './components/gameLogic';
+import { generateDeck } from './components/Deck';
 import Hand from './components/Hand';
 import './App.css';
 

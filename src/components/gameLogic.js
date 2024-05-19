@@ -1,16 +1,3 @@
-import { shuffle, dealCard } from './Deck';
-
-export const generateDeck = () => {
-  const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
-  const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-  let deck = [];
-  for (let suit of suits) {
-    for (let value of values) {
-      deck.push({ suit, value });
-    }
-  }
-  return shuffle(deck);
-};
 
 export const dealCards = (deck) => {
   const newDeck = [...deck];
@@ -38,13 +25,13 @@ export const calculateHandValue = (hand) => {
   let value = 0;
   let aces = 0;
   for (let card of hand) {
-    if (['J', 'Q', 'K'].includes(card.value)) {
+    if (['Jack', 'Queen', 'King'].includes(card.rank)) {
       value += 10;
-    } else if (card.value === 'A') {
+    } else if (card.rank === 'Ace') {
       value += 11;
       aces += 1;
     } else {
-      value += parseInt(card.value);
+      value += parseInt(card.rank);
     }
   }
   while (value > 21 && aces > 0) {
@@ -60,8 +47,8 @@ export const checkGameStatus = (playerHand, dealerHand) => {
 
   if (playerValue > 21) return 'Player Busts!';
   if (dealerValue > 21) return 'Dealer Busts!';
-  if (playerValue === 21) return 'Player Wins!';
-  if (dealerValue === 21) return 'Dealer Wins!';
+  if (playerValue === 21 && dealerValue !== 21) return 'Player Wins!';
+  if (dealerValue === 21 && playerValue !== 21) return 'Dealer Wins!';
   if (dealerValue >= 17) {
     if (dealerValue > playerValue) return 'Dealer Wins!';
     if (dealerValue < playerValue) return 'Player Wins!';
