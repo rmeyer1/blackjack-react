@@ -60,15 +60,19 @@ export const checkGameStatus = (playerHand, dealerHand) => {
   const playerValue = calculateHandValue(playerHand);
   const dealerValue = calculateHandValue(dealerHand);
 
+  // Check for busts or automatic wins first
   if (playerValue > 21) return 'Player Busts!';
   if (dealerValue > 21) return 'Dealer Busts!';
-  if (playerValue === 21 && dealerValue !== 21) return 'Player Wins!';
-  if (dealerValue === 21 && playerValue !== 21) return 'Dealer Wins!';
+  if (playerValue === 21 && dealerHand.length === 2) return 'Player Wins!';
+  if (dealerValue === 21 && dealerHand.length === 2) return 'Dealer Wins!';
+
+  // If dealer has reached a stable state (17 or more), check for end game conditions
   if (dealerValue >= 17) {
-    if (dealerValue > playerValue) return 'Dealer Wins!';
-    if (dealerValue < playerValue) return 'Player Wins!';
-    return 'Push!';
+    if (playerValue > dealerValue) return 'Player Wins!';
+    if (playerValue === dealerValue) return 'Push!';
   }
+
+  // If none of the above conditions are met, the game is still in progress
   return 'playing';
 };
 
