@@ -68,6 +68,7 @@ export const checkGameStatus = (playerHand, dealerHand) => {
 
   // If dealer has reached a stable state (17 or more), check for end game conditions
   if (dealerValue >= 17) {
+    if(dealerValue > playerValue) return 'Dealer Wins!';
     if (playerValue > dealerValue) return 'Player Wins!';
     if (playerValue === dealerValue) return 'Push!';
   }

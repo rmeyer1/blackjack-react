@@ -16,24 +16,43 @@ function App() {
     setDeck(generateDeck());
   }, []);
 
-  const handleDealCards = () => {
-    if (deck.length < 4) {
-      setShuffleMessage('Shuffling New Deck');
-      setDeck(generateDeck());
-    }
-    const { newDeck, playerHand, dealerHand } = dealCards(deck);
-    setDeck(newDeck);
-    setPlayerHands([playerHand]);
-    setDealerHand(dealerHand);
+// Modify the handleDealCards function to ensure it properly initializes the game state after reshuffling
+const handleDealCards = () => {
+  if (deck.length < 4) {
+    setShuffleMessage('Shuffling New Deck');
+    setDeck(generateDeck());
+    // Reset player and dealer hands to ensure they are in sync with the new deck
+    setPlayerHands([[]]);
+    setDealerHand([]);
     setGameStatus('playing');
     setActiveHandIndex(0);
-    setShuffleMessage('')
-  };
+    setTimeout(() => {
+      setShuffleMessage('');
+    }, 5000); // Delay in milliseconds
+    return; // Return early to prevent dealing cards from an uninitialized state
+  }
+  const { newDeck, playerHand, dealerHand } = dealCards(deck);
+  setDeck(newDeck);
+  setPlayerHands([playerHand]);
+  setDealerHand(dealerHand);
+  setGameStatus('playing');
+  setActiveHandIndex(0);
+  setShuffleMessage('');
+};
 
   const handleHit = () => {
     if (deck.length === 0) {
       setShuffleMessage('Shuffling New Deck');
       setDeck(generateDeck());
+      // Reset player and dealer hands to ensure they are in sync with the new deck
+      setPlayerHands([[]]);
+      setDealerHand([]);
+      setGameStatus('playing');
+      setActiveHandIndex(0);
+      setTimeout(() => {
+        setShuffleMessage('');
+      }, 5000); // Delay in milliseconds
+      return; // Return early to prevent dealing cards from an uninitialized state
     }
     const { newDeck, newHand } = hit(deck, playerHands[activeHandIndex]);
     const updatedHands = [...playerHands];
@@ -52,6 +71,15 @@ function App() {
       if (deck.length === 0) {
         setShuffleMessage('Shuffling New Deck');
         setDeck(generateDeck());
+          // Reset player and dealer hands to ensure they are in sync with the new deck
+        setPlayerHands([[]]);
+        setDealerHand([]);
+        setGameStatus('playing');
+        setActiveHandIndex(0);
+        setTimeout(() => {
+          setShuffleMessage('');
+        }, 5000); // Delay in milliseconds
+        return; // Return early to prevent dealing cards from an uninitialized state
       }
       const { newDeck, newHand } = stand(deck, dealerHand);
       setDeck(newDeck);
@@ -65,6 +93,15 @@ function App() {
     if (deck.length < 2) {
       setShuffleMessage('Shuffling New Deck');
       setDeck(generateDeck());
+      // Reset player and dealer hands to ensure they are in sync with the new deck
+      setPlayerHands([[]]);
+      setDealerHand([]);
+      setGameStatus('playing');
+      setActiveHandIndex(0);
+      setTimeout(() => {
+        setShuffleMessage('');
+      }, 5000); // Delay in milliseconds
+      return; // Return early to prevent dealing cards from an uninitialized state
     }
     const { splitHandOne, splitHandTwo, newDeck } = split(deck, playerHands[activeHandIndex]);
     const updatedHands = [];
@@ -75,6 +112,19 @@ function App() {
     setShuffleMessage('')
   };
   const handleDoubleDown = () => {
+    if (deck.length === 0) {
+      setShuffleMessage('Shuffling New Deck');
+      setDeck(generateDeck());
+        // Reset player and dealer hands to ensure they are in sync with the new deck
+      setPlayerHands([[]]);
+      setDealerHand([]);
+      setGameStatus('playing');
+      setActiveHandIndex(0);
+      setTimeout(() => {
+        setShuffleMessage('');
+      }, 5000); // Delay in milliseconds
+      return; // Return early to prevent dealing cards from an uninitialized state
+    }
     const { newDeck, newHand } = doubleDown(deck, playerHands[activeHandIndex]);
     const updatedHands = [...playerHands];
     updatedHands[activeHandIndex] = newHand;
@@ -89,6 +139,13 @@ function App() {
     const hand = playerHands[activeHandIndex];
     return hand.length === 2 && hand[0].rank === hand[1].rank && gameStatus === 'playing';
   };  
+  // Modify the calculateHandValue function to safely handle undefined or empty hands
+const safeCalculateHandValue = (hand) => {
+  if (!hand || hand.length === 0 || hand.some(card => card === undefined)) {
+    return 0; // Return 0 or an appropriate default value if the hand is not valid
+  }
+  return calculateHandValue(hand);
+};
 
   return (
     <div className="App">
@@ -103,11 +160,11 @@ function App() {
       {playerHands.map((hand, index) => (
         <div key={index}>
           <Hand cards={hand} title={`Player Hand ${index + 1}`} />
-          <div>Player Value: {calculateHandValue(hand)}</div>
+          <div>Player Value: {safeCalculateHandValue(hand)}</div>
         </div>
       ))}
       <Hand cards={dealerHand} title="Dealer Hand" />
-      <div>Dealer Value: {calculateHandValue(dealerHand)}</div>
+      <div>Dealer Value: {safeCalculateHandValue(dealerHand)}</div>
       <div>Game Status: {gameStatus}</div>
       {shuffleMessage && <div>{shuffleMessage}</div>}
     </div>
