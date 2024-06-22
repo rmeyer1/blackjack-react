@@ -147,28 +147,28 @@ const safeCalculateHandValue = (hand) => {
   return calculateHandValue(hand);
 };
 
-  return (
-    <div className="App">
-      <h1>Blackjack</h1>
-      <button onClick={handleDealCards}>Deal</button>
-      <button onClick={handleHit} disabled={gameStatus !== 'playing'}>Hit</button>
-      <button onClick={handleStand} disabled={gameStatus !== 'playing'}>Stand</button>
-      <button onClick={handleDoubleDown} disabled={gameStatus !== 'playing'}>Double</button>
-      {playerHands[activeHandIndex].length === 2 && playerHands.length < 3 && (
-        <button onClick={handleSplit} disabled={!canSplit()}>Split</button>
-      )}
-      {playerHands.map((hand, index) => (
-        <div key={index}>
-          <Hand cards={hand} title={`Player Hand ${index + 1}`} />
-          <div>Player Value: {safeCalculateHandValue(hand)}</div>
-        </div>
-      ))}
-      <Hand cards={dealerHand} title="Dealer Hand" />
-      <div>Dealer Value: {safeCalculateHandValue(dealerHand)}</div>
-      <div>Game Status: {gameStatus}</div>
-      {shuffleMessage && <div>{shuffleMessage}</div>}
-    </div>
-  );
+return (
+  <div className="App">
+    <h1>Blackjack</h1>
+    <button className="p-2 mr-2 border border-gray-300 rounded" onClick={handleDealCards}>Deal</button>
+    <button className="p-2 mr-2 border border-gray-300 rounded" onClick={handleHit} disabled={gameStatus !== 'playing'}>Hit</button>
+    <button className="p-2 mr-2 border border-gray-300 rounded" onClick={handleStand} disabled={gameStatus !== 'playing'}>Stand</button>
+    <button className="p-2 mr-2 border border-gray-300 rounded" onClick={handleDoubleDown} disabled={gameStatus !== 'playing'}>Double</button>
+    {playerHands[activeHandIndex].length === 2 && playerHands.length < 3 && (
+      <button className="p-2 mr-2 border border-gray-300 rounded" onClick={handleSplit} disabled={!canSplit()}>Split</button>
+    )}
+    {playerHands.map((hand, index) => (
+      <div key={index}>
+        <Hand cards={hand} title={`Player Hand ${index + 1}`} />
+        <div>Player Value: {safeCalculateHandValue(hand)}</div>
+      </div>
+    ))}
+    <Hand cards={dealerHand} title="Dealer Hand" />
+    <div>Dealer Value: {safeCalculateHandValue(dealerHand)}</div>
+    <div>Game Status: {gameStatus}</div>
+    {shuffleMessage && <div>{shuffleMessage}</div>}
+  </div>
+);
 }
 
 export default App;
